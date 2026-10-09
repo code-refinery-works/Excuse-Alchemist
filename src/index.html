@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS公式ドキュメント - IAMポリシー設計ガイド</title>
+  <link rel="stylesheet" href="css/style.css">
+<body>
+
+<!-- BOSS KEY OVERLAY -->
+<div class="boss-key-screen" id="bossKeyScreen">
+  <div class="excel-header">
+    <span>📊</span>
+    <span>FY202X_Q3_業績管理表_最終版_修正v8_本当の最終.xlsx - Microsoft Excel</span>
+  </div>
+  <div class="excel-ribbon">
+    <span>ファイル</span><span>ホーム</span><span>挿入</span><span>ページレイアウト</span><span>数式</span><span>データ</span><span>校閲</span><span>表示</span>
+  </div>
+  <div class="excel-formula-bar">
+    <span style="color:#888;margin-right:12px">fx</span>
+    <span>=IFERROR(VLOOKUP(B12,予算管理!$A$2:$G$150,5,FALSE)*INDEX(INDIRECT("'"&A1&"'!$C$1:$C$50"),MATCH(D12,INDIRECT("'"&A1&"'!$B$1:$B$50"),0)),0)</span>
+  </div>
+  <div class="excel-grid">
+    <table id="excelTable"></table>
+  </div>
+  <div class="boss-key-hint">ESC×2 で戻る</div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">⚗️ v1.0.0 ｜ 承認待ち</div>
+    <h1 class="app-title">言い訳の<br>錬金術師</h1>
+    <p class="app-subtitle">エクスキュース・アルケミスト</p>
+    <p class="app-tagline">あなたの怠惰を、芸術に変える。</p>
+    <div class="stats-row">
+      <div class="stat-item"><span class="stat-num" id="statGenerated">0</span><span class="stat-label">生成数</span></div>
+      <div class="stat-item"><span class="stat-num" id="statSaved">0</span><span class="stat-label">難局回避</span></div>
+      <div class="stat-item"><span class="stat-num">80%</span><span class="stat-label">平謝り削減</span></div>
+    </div>
+  </div>
+
+  <!-- PANIC BUTTON -->
+  <div class="panic-section" id="panicSection">
+    <div class="panic-hint">まず↓を押せ</div>
+    <button class="panic-btn" id="panicBtn" onclick="goToInput()">
+      😱<br>やらかした
+    </button>
+    <div class="panic-subtext">タップで即座に言い訳生成フローへ</div>
+  </div>
+
+  <!-- INPUT SECTION -->
+  <div class="input-section" id="inputSection" style="display:none">
+    <h2 class="section-title">🔍 状況入力</h2>
+    <p class="section-subtitle">正直に答えてください（このデータはAI学習に使われます・嘘）</p>
+
+    <div class="field-group">
+      <div class="field-label">🤔 何をやらかしましたか？</div>
+      <div class="option-grid" id="situationGrid">
+        <div class="option-card selected" data-group="situation" data-value="遅刻">😴<br>起きれなかった</div>
+        <div class="option-card" data-group="situation" data-value="未提出">📋<br>忘れてた</div>
+        <div class="option-card" data-group="situation" data-value="サボり">🛋️<br>やる気が起きない</div>
+        <div class="option-card" data-group="situation" data-value="タスク放置">👻<br>存在しないタスク<br>だと思っていた</div>
+        <div class="option-card" data-group="situation" data-value="既読スルー">📵<br>返信するのを<br>忘れてた</div>
+        <div class="option-card" data-group="situation" data-value="Zoom爆睡">😪<br>Zoom中に<br>落ちてた</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">👤 相手は誰ですか？</div>
+      <div class="option-grid" id="targetGrid">
+        <div class="option-card selected" data-group="target" data-value="上司">👔<br>体育会系の上司</div>
+        <div class="option-card" data-group="target" data-value="温厚な上司">🧘<br>温厚な上司</div>
+        <div class="option-card" data-group="target" data-value="クライアント">💼<br>クライアント</div>
+        <div class="option-card" data-group="target" data-value="同僚">🤝<br>同僚</div>
+        <div class="option-card" data-group="target" data-value="恋人">💕<br>恋人</div>
+        <div class="option-card" data-group="target" data-value="家族">🏠<br>家族</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">🔥 炎上レベルは？</div>
+      <div class="option-grid" id="levelGrid">
+        <div class="option-card selected" data-group="level" data-value="小火">🕯️<br>小火<br><small>まだ誤魔化せる</small></div>
+        <div class="option-card" data-group="level" data-value="中炎上">🔥<br>中炎上<br><small>既に怪しまれてる</small></div>
+        <div class="option-card" data-group="level" data-value="大炎上">💥<br>大炎上<br><small>怒号が聞こえる</small></div>
+        <div class="option-card" data-group="level" data-value="終末">☢️<br>終末<br><small>もう無理かも</small></div>
+      </div>
+    </div>
+
+    <button class="generate-btn" id="generateBtn" onclick="generateExcuses()">
+      ⚗️ 言い訳を錬成する
+    </button>
+  </div>
+
+  <!-- OUTPUT SECTION -->
+  <div class="output-section" id="outputSection" style="display:none">
+    <h2 class="section-title">✨ 錬成完了</h2>
+    <p class="section-subtitle" id="outputSubtitle"></p>
+
+    <div id="excuseCards"></div>
+
+    <button class="master-copy-btn" id="masterCopyBtn" onclick="masterCopy()">
+      📋 最高の言い訳をコピーして乗り切る
+    </button>
+    <button class="regenerate-btn" onclick="regenerate()">🔄 別パターンを錬成する</button>
+
+    <!-- AD SECTION -->
+    <div class="ad-section">
+      <div class="ad-title">🆘 それでもダメだったあなたへ</div>
+      <div class="ad-subtitle">
+        言い訳が通じなかった場合の<br>究極のリスクヘッジ<br>
+        <strong style="color:#fff">退職代行サービス「もうムリ㌠」</strong><br>
+        <small>今すぐLINEで即日対応・弁護士監修</small>
+      </div>
+      <button class="ad-btn" onclick="showModal('退職代行広告', '※これは架空の広告です。\n実際の退職は上司に直接言えば大丈夫です（多分）。\n\n本当に困ったときは信頼できる人に相談しましょう。\n\nこのアプリは全部ジョークです。😂')">
+        📞 今すぐ相談（無料）
+      </button>
+      <div class="ad-disclaimer">※本広告はフィクションです。実際のサービスとは一切関係ありません。</div>
+    </div>
+
+    <button class="regenerate-btn" style="margin-top:0" onclick="backToTop()">🏠 最初からやり直す</button>
+  </div>
+
+  <!-- TOOLS SECTION -->
+  <div class="tools-section" id="toolsSection" style="display:none">
+    <div class="tools-title">緊急ツールキット</div>
+    <div class="tools-grid">
+      <button class="tool-btn" onclick="showTool('zoom')">
+        <span class="tool-icon">📹</span>
+        <span class="tool-label">Zoom<br>フリーズ偽装</span>
+      </button>
+      <button class="tool-btn" onclick="showTool('sound')">
+        <span class="tool-icon">🎙️</span>
+        <span class="tool-label">体調不良<br>サウンド</span>
+      </button>
+      <button class="tool-btn" onclick="showTool('seiza')">
+        <span class="tool-icon">🙇</span>
+        <span class="tool-label">土下座<br>角度測定</span>
+      </button>
+      <button class="tool-btn" onclick="showTool('cat')">
+        <span class="tool-icon">🐱</span>
+        <span class="tool-label">猫が踏んだ<br>証拠写真</span>
+      </button>
+    </div>
+
+    <!-- ZOOM FREEZER -->
+    <div class="zoom-panel" id="toolZoom" style="display:none">
+      <div class="soundboard-title">📹 Zoomフリーズ偽装ツール</div>
+      <div class="zoom-preview" id="zoomPreview" onclick="triggerFreeze()">
+        <div class="zoom-face" id="zoomFace">😶</div>
+        <div class="zoom-label">自分 (Host)</div>
+        <div class="zoom-quality" id="zoomQuality">HD ●</div>
+        <div class="glitch-overlay" id="glitchOverlay"></div>
+      </div>
+      <button class="freeze-btn" onclick="triggerFreeze()">🔌 回線を落とす（フリーズ偽装）</button>
+      <div class="freeze-status" id="freezeStatus">クリックで発動</div>
+    </div>
+
+    <!-- SOUNDBOARD -->
+    <div class="soundboard" id="toolSound" style="display:none">
+      <div class="soundboard-title">🎙️ 体調不良サウンドボード</div>
+      <div class="sound-grid">
+        <button class="sound-btn" onclick="playSound('cough')" id="snd-cough">
+          <span class="sound-icon">🤧</span>弱々しい咳
+        </button>
+        <button class="sound-btn" onclick="playSound('sniff')" id="snd-sniff">
+          <span class="sound-icon">😮‍💨</span>鼻をすする
+        </button>
+        <button class="sound-btn" onclick="playSound('groan')" id="snd-groan">
+          <span class="sound-icon">😩</span>うめき声
+        </button>
+        <button class="sound-btn" onclick="playSound('ambulance')" id="snd-ambulance">
+          <span class="sound-icon">🚑</span>救急車の音
+        </button>
+        <button class="sound-btn" onclick="playSound('static')" id="snd-static">
+          <span class="sound-icon">📻</span>雑音ノイズ
+        </button>
+        <button class="sound-btn" onclick="playSound('cutoff')" id="snd-cutoff">
+          <span class="sound-icon">📵</span>「プツッ」<br>回線切断
+        </button>
+      </div>
+    </div>
+
+    <!-- SEIZA METER -->
+    <div class="seiza-panel" id="toolSeiza" style="display:none">
+      <div class="soundboard-title">🙇 土下座角度スコアリングシステム</div>
+      <div class="seiza-display">
+        <div class="seiza-figure" id="seizaFigure">🧍</div>
+        <div class="seiza-score-label" id="seizaScore">-- pt</div>
+        <div class="seiza-angle-label" id="seizaAngle">角度: --°</div>
+        <div class="seiza-meter"><div class="seiza-fill" id="seizaFill" style="width:0%"></div></div>
+        <div class="seiza-feedback" id="seizaFeedback">ボタンを押してから頭を下げてください</div>
+        <button class="seiza-start-btn" id="seizaStartBtn" onclick="startSeiza()">📱 計測開始（デバイスを傾ける）</button>
+      </div>
+    </div>
+
+    <!-- CAT PHOTO -->
+    <div class="cat-panel" id="toolCat" style="display:none">
+      <div class="soundboard-title">🐱 猫がキーボードに乗った証拠写真生成</div>
+      <div class="cat-canvas-wrap">
+        <canvas id="catCanvas" width="360" height="200"></canvas>
+      </div>
+      <button class="cat-gen-btn" onclick="generateCatPhoto()">🎲 証拠写真を生成する</button>
+      <button class="cat-gen-btn" style="background:linear-gradient(135deg,#06d6a0,#118ab2)" onclick="downloadCatPhoto()">💾 画像を保存</button>
+      <div class="cat-exif" id="catExif">
+        📷 EXIF情報がここに表示されます
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history-panel" id="historyPanel" style="display:none">
+    <div class="history-title">📜 生成履歴</div>
+    <div id="historyList<overlap>
+    <div id="historyList
+</overlap>
+<continue>
+"></div>
+  </div>
+
+  <!-- BOSS KEY OVERLAY -->
+  <div class="boss-key-overlay" id="bossKeyOverlay" style="display:none">
+    <div class="boss-key-header">
+      <span>Microsoft Excel - 業務集計_2024Q4_最終版_本当の最終版_v3_fix2.xlsx</span>
+      <div class="boss-key-controls">
+        <span>－</span><span>□</span><span>✕</span>
+      </div>
+    </div>
+    <div class="boss-key-content">
+      <table class="excel-table">
+        <tr>
+          <th></th><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th>
+        </tr>
+        <tr><td>1</td><td>部門</td><td>Q1売上</td><td>Q2売上</td><td>Q3売上</td><td>Q4売上</td><td>合計</td><td>前年比</td><td>備考</td></tr>
+        <tr><td>2</td><td>営業部</td><td>4,520,000</td><td>5,110,000</td><td>4,890,000</td><td>6,230,000</td><td>=SUM(B2:E2)</td><td>=F2/F3*100</td><td>達成</td></tr>
+        <tr><td>3</td><td>開発部</td><td>2,340,000</td><td>2,780,000</td><td>3,100,000</td><td>2,950,000</td><td>=SUM(B3:E3)</td><td>=F3/F4*100</td><td>要改善</td></tr>
+        <tr><td>4</td><td>マーケ</td><td>1,890,000</td><td>2,100,000</td><td>1,760,000</td><td>2,340,000</td><td>=SUM(B4:E4)</td><td>=F4/F5*100</td><td>達成</td></tr>
+        <tr><td>5</td><td>総務部</td><td>980,000</td><td>1,020,000</td><td>1,150,000</td><td>990,000</td><td>=SUM(B5:E5)</td><td>=F5/F6*100</td><td>―</td></tr>
+        <tr><td>6</td><td>合計</td><td>=SUM(B2:B5)</td><td>=SUM(C2:C5)</td><td>=SUM(D2:D5)</td><td>=SUM(E2:E5)</td><td>=SUM(F2:F5)</td><td>=AVERAGE(G2:G5)</td><td></td></tr>
+        <tr><td>7</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>8</td><td>複雑な計算式:</td><td colspan="7">=IF(AND(F2>F3,VLOOKUP(A2,$A$1:$H$6,6,FALSE)>0),IFERROR(INDEX($B$2:$E$5,MATCH(MAX(F2:F5),F2:F5,0),MATCH(MAX(B2:B5),B2:B5,0)),"N/A"),"要確認")</td></tr>
+        <tr><td>9</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>10</td><td>ピボット分析</td><td>=SUMPRODUCT((B2:B5>2000000)*B2:B5)</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>11</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>12</td><td>注記</td><td colspan="7">※数値は暫定値。確定値は経理部承認後に更新予定。前年比はYoY換算（税抜き・送料除く）</td></tr>
+      </table>
+    </div>
+    <div class="boss-key-footer">
+      <span>Sheet1</span><span>Sheet2</span><span>Sheet3</span>
+      <span style="margin-left:auto">準備完了　　NUM　　　　100%</span>
+    </div>
+  </div>
+
+    <script src="js/app.js"></script>
+
+</body>
+</html>
